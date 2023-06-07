@@ -1,663 +1,82 @@
-<!DOCTYPE html>
-<!-- saved from url=(0079)file:///C:/Users/aklwin/AppData/Local/Temp/RtmpQZrdMG/preview-491818f45100.html -->
-<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+Analysis of Myanmar Census 2014
+================
+UNICEF Myanmar, SPCRM
+2023-06-07
 
+# Overview
 
+This analysis is based on the *township level* information data of
+Myanmar Census 2014.We are interested in examining the differece of
+school attendance rates between the children with *no disability* and
+their counterparts with *severe disability*.
 
-<meta name="generator" content="pandoc">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+Using the **REDATAM** that is designed to extract data from Census, we
+constructed two data sets at township level, each representing the
+primary school attendance rates of our groups of interest (normal
+vs. severe) disability).
 
-<style type="text/css">
-@font-face {
-font-family: octicons-link;
-src: url(data:font/woff;charset=utf-8;base64,d09GRgABAAAAAAZwABAAAAAACFQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABEU0lHAAAGaAAAAAgAAAAIAAAAAUdTVUIAAAZcAAAACgAAAAoAAQAAT1MvMgAAAyQAAABJAAAAYFYEU3RjbWFwAAADcAAAAEUAAACAAJThvmN2dCAAAATkAAAABAAAAAQAAAAAZnBnbQAAA7gAAACyAAABCUM+8IhnYXNwAAAGTAAAABAAAAAQABoAI2dseWYAAAFsAAABPAAAAZwcEq9taGVhZAAAAsgAAAA0AAAANgh4a91oaGVhAAADCAAAABoAAAAkCA8DRGhtdHgAAAL8AAAADAAAAAwGAACfbG9jYQAAAsAAAAAIAAAACABiATBtYXhwAAACqAAAABgAAAAgAA8ASm5hbWUAAAToAAABQgAAAlXu73sOcG9zdAAABiwAAAAeAAAAME3QpOBwcmVwAAAEbAAAAHYAAAB/aFGpk3jaTY6xa8JAGMW/O62BDi0tJLYQincXEypYIiGJjSgHniQ6umTsUEyLm5BV6NDBP8Tpts6F0v+k/0an2i+itHDw3v2+9+DBKTzsJNnWJNTgHEy4BgG3EMI9DCEDOGEXzDADU5hBKMIgNPZqoD3SilVaXZCER3/I7AtxEJLtzzuZfI+VVkprxTlXShWKb3TBecG11rwoNlmmn1P2WYcJczl32etSpKnziC7lQyWe1smVPy/Lt7Kc+0vWY/gAgIIEqAN9we0pwKXreiMasxvabDQMM4riO+qxM2ogwDGOZTXxwxDiycQIcoYFBLj5K3EIaSctAq2kTYiw+ymhce7vwM9jSqO8JyVd5RH9gyTt2+J/yUmYlIR0s04n6+7Vm1ozezUeLEaUjhaDSuXHwVRgvLJn1tQ7xiuVv/ocTRF42mNgZGBgYGbwZOBiAAFGJBIMAAizAFoAAABiAGIAznjaY2BkYGAA4in8zwXi+W2+MjCzMIDApSwvXzC97Z4Ig8N/BxYGZgcgl52BCSQKAA3jCV8CAABfAAAAAAQAAEB42mNgZGBg4f3vACQZQABIMjKgAmYAKEgBXgAAeNpjYGY6wTiBgZWBg2kmUxoDA4MPhGZMYzBi1AHygVLYQUCaawqDA4PChxhmh/8ODDEsvAwHgMKMIDnGL0x7gJQCAwMAJd4MFwAAAHjaY2BgYGaA4DAGRgYQkAHyGMF8NgYrIM3JIAGVYYDT+AEjAwuDFpBmA9KMDEwMCh9i/v8H8sH0/4dQc1iAmAkALaUKLgAAAHjaTY9LDsIgEIbtgqHUPpDi3gPoBVyRTmTddOmqTXThEXqrob2gQ1FjwpDvfwCBdmdXC5AVKFu3e5MfNFJ29KTQT48Ob9/lqYwOGZxeUelN2U2R6+cArgtCJpauW7UQBqnFkUsjAY/kOU1cP+DAgvxwn1chZDwUbd6CFimGXwzwF6tPbFIcjEl+vvmM/byA48e6tWrKArm4ZJlCbdsrxksL1AwWn/yBSJKpYbq8AXaaTb8AAHja28jAwOC00ZrBeQNDQOWO//sdBBgYGRiYWYAEELEwMTE4uzo5Zzo5b2BxdnFOcALxNjA6b2ByTswC8jYwg0VlNuoCTWAMqNzMzsoK1rEhNqByEyerg5PMJlYuVueETKcd/89uBpnpvIEVomeHLoMsAAe1Id4AAAAAAAB42oWQT07CQBTGv0JBhagk7HQzKxca2sJCE1hDt4QF+9JOS0nbaaYDCQfwCJ7Au3AHj+LO13FMmm6cl7785vven0kBjHCBhfpYuNa5Ph1c0e2Xu3jEvWG7UdPDLZ4N92nOm+EBXuAbHmIMSRMs+4aUEd4Nd3CHD8NdvOLTsA2GL8M9PODbcL+hD7C1xoaHeLJSEao0FEW14ckxC+TU8TxvsY6X0eLPmRhry2WVioLpkrbp84LLQPGI7c6sOiUzpWIWS5GzlSgUzzLBSikOPFTOXqly7rqx0Z1Q5BAIoZBSFihQYQOOBEdkCOgXTOHA07HAGjGWiIjaPZNW13/+lm6S9FT7rLHFJ6fQbkATOG1j2OFMucKJJsxIVfQORl+9Jyda6Sl1dUYhSCm1dyClfoeDve4qMYdLEbfqHf3O/AdDumsjAAB42mNgYoAAZQYjBmyAGYQZmdhL8zLdDEydARfoAqIAAAABAAMABwAKABMAB///AA8AAQAAAAAAAAAAAAAAAAABAAAAAA==) format('woff');
-}
-body {
--webkit-text-size-adjust: 100%;
-text-size-adjust: 100%;
-color: #333;
-font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-font-size: 16px;
-line-height: 1.6;
-word-wrap: break-word;
-}
-a {
-background-color: transparent;
-}
-a:active,
-a:hover {
-outline: 0;
-}
-strong {
-font-weight: bold;
-}
-h1 {
-font-size: 2em;
-margin: 0.67em 0;
-}
-img {
-border: 0;
-}
-hr {
-box-sizing: content-box;
-height: 0;
-}
-pre {
-overflow: auto;
-}
-code,
-kbd,
-pre {
-font-family: monospace, monospace;
-font-size: 1em;
-}
-input {
-color: inherit;
-font: inherit;
-margin: 0;
-}
-html input[disabled] {
-cursor: default;
-}
-input {
-line-height: normal;
-}
-input[type="checkbox"] {
-box-sizing: border-box;
-padding: 0;
-}
-table {
-border-collapse: collapse;
-border-spacing: 0;
-}
-td,
-th {
-padding: 0;
-}
-* {
-box-sizing: border-box;
-}
-input {
-font: 13px / 1.4 Helvetica, arial, nimbussansl, liberationsans, freesans, clean, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-}
-a {
-color: #4078c0;
-text-decoration: none;
-}
-a:hover,
-a:active {
-text-decoration: underline;
-}
-hr {
-height: 0;
-margin: 15px 0;
-overflow: hidden;
-background: transparent;
-border: 0;
-border-bottom: 1px solid #ddd;
-}
-hr:before {
-display: table;
-content: "";
-}
-hr:after {
-display: table;
-clear: both;
-content: "";
-}
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-margin-top: 15px;
-margin-bottom: 15px;
-line-height: 1.1;
-}
-h1 {
-font-size: 30px;
-}
-h2 {
-font-size: 21px;
-}
-h3 {
-font-size: 16px;
-}
-h4 {
-font-size: 14px;
-}
-h5 {
-font-size: 12px;
-}
-h6 {
-font-size: 11px;
-}
-blockquote {
-margin: 0;
-}
-ul,
-ol {
-padding: 0;
-margin-top: 0;
-margin-bottom: 0;
-}
-ol ol,
-ul ol {
-list-style-type: lower-roman;
-}
-ul ul ol,
-ul ol ol,
-ol ul ol,
-ol ol ol {
-list-style-type: lower-alpha;
-}
-dd {
-margin-left: 0;
-}
-code {
-font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
-font-size: 12px;
-}
-pre {
-margin-top: 0;
-margin-bottom: 0;
-font: 12px Consolas, "Liberation Mono", Menlo, Courier, monospace;
-}
-.select::-ms-expand {
-opacity: 0;
-}
-.octicon {
-font: normal normal normal 16px/1 octicons-link;
-display: inline-block;
-text-decoration: none;
-text-rendering: auto;
--webkit-font-smoothing: antialiased;
--moz-osx-font-smoothing: grayscale;
--webkit-user-select: none;
--moz-user-select: none;
--ms-user-select: none;
-user-select: none;
-}
-.octicon-link:before {
-content: '\f05c';
-}
-.markdown-body:before {
-display: table;
-content: "";
-}
-.markdown-body:after {
-display: table;
-clear: both;
-content: "";
-}
-.markdown-body>*:first-child {
-margin-top: 0 !important;
-}
-.markdown-body>*:last-child {
-margin-bottom: 0 !important;
-}
-a:not([href]) {
-color: inherit;
-text-decoration: none;
-}
-.anchor {
-display: inline-block;
-padding-right: 2px;
-margin-left: -18px;
-}
-.anchor:focus {
-outline: none;
-}
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-margin-top: 1em;
-margin-bottom: 16px;
-font-weight: bold;
-line-height: 1.4;
-}
-h1 .octicon-link,
-h2 .octicon-link,
-h3 .octicon-link,
-h4 .octicon-link,
-h5 .octicon-link,
-h6 .octicon-link {
-color: #000;
-vertical-align: middle;
-visibility: hidden;
-}
-h1:hover .anchor,
-h2:hover .anchor,
-h3:hover .anchor,
-h4:hover .anchor,
-h5:hover .anchor,
-h6:hover .anchor {
-text-decoration: none;
-}
-h1:hover .anchor .octicon-link,
-h2:hover .anchor .octicon-link,
-h3:hover .anchor .octicon-link,
-h4:hover .anchor .octicon-link,
-h5:hover .anchor .octicon-link,
-h6:hover .anchor .octicon-link {
-visibility: visible;
-}
-h1 {
-padding-bottom: 0.3em;
-font-size: 2.25em;
-line-height: 1.2;
-border-bottom: 1px solid #eee;
-}
-h1 .anchor {
-line-height: 1;
-}
-h2 {
-padding-bottom: 0.3em;
-font-size: 1.75em;
-line-height: 1.225;
-border-bottom: 1px solid #eee;
-}
-h2 .anchor {
-line-height: 1;
-}
-h3 {
-font-size: 1.5em;
-line-height: 1.43;
-}
-h3 .anchor {
-line-height: 1.2;
-}
-h4 {
-font-size: 1.25em;
-}
-h4 .anchor {
-line-height: 1.2;
-}
-h5 {
-font-size: 1em;
-}
-h5 .anchor {
-line-height: 1.1;
-}
-h6 {
-font-size: 1em;
-color: #777;
-}
-h6 .anchor {
-line-height: 1.1;
-}
-p,
-blockquote,
-ul,
-ol,
-dl,
-table,
-pre {
-margin-top: 0;
-margin-bottom: 16px;
-}
-hr {
-height: 4px;
-padding: 0;
-margin: 16px 0;
-background-color: #e7e7e7;
-border: 0 none;
-}
-ul,
-ol {
-padding-left: 2em;
-}
-ul ul,
-ul ol,
-ol ol,
-ol ul {
-margin-top: 0;
-margin-bottom: 0;
-}
-li>p {
-margin-top: 16px;
-}
-dl {
-padding: 0;
-}
-dl dt {
-padding: 0;
-margin-top: 16px;
-font-size: 1em;
-font-style: italic;
-font-weight: bold;
-}
-dl dd {
-padding: 0 16px;
-margin-bottom: 16px;
-}
-blockquote {
-padding: 0 15px;
-color: #777;
-border-left: 4px solid #ddd;
-}
-blockquote>:first-child {
-margin-top: 0;
-}
-blockquote>:last-child {
-margin-bottom: 0;
-}
-table {
-display: block;
-width: 100%;
-overflow: auto;
-word-break: normal;
-word-break: keep-all;
-}
-table th {
-font-weight: bold;
-}
-table th,
-table td {
-padding: 6px 13px;
-border: 1px solid #ddd;
-}
-table tr {
-background-color: #fff;
-border-top: 1px solid #ccc;
-}
-table tr:nth-child(2n) {
-background-color: #f8f8f8;
-}
-img {
-max-width: 100%;
-box-sizing: content-box;
-background-color: #fff;
-}
-code {
-padding: 0;
-padding-top: 0.2em;
-padding-bottom: 0.2em;
-margin: 0;
-font-size: 85%;
-background-color: rgba(0,0,0,0.04);
-border-radius: 3px;
-}
-code:before,
-code:after {
-letter-spacing: -0.2em;
-content: "\00a0";
-}
-pre>code {
-padding: 0;
-margin: 0;
-font-size: 100%;
-word-break: normal;
-white-space: pre;
-background: transparent;
-border: 0;
-}
-.highlight {
-margin-bottom: 16px;
-}
-.highlight pre,
-pre {
-padding: 16px;
-overflow: auto;
-font-size: 85%;
-line-height: 1.45;
-background-color: #f7f7f7;
-border-radius: 3px;
-}
-.highlight pre {
-margin-bottom: 0;
-word-break: normal;
-}
-pre {
-word-wrap: normal;
-}
-pre code {
-display: inline;
-max-width: initial;
-padding: 0;
-margin: 0;
-overflow: initial;
-line-height: inherit;
-word-wrap: normal;
-background-color: transparent;
-border: 0;
-}
-pre code:before,
-pre code:after {
-content: normal;
-}
-kbd {
-display: inline-block;
-padding: 3px 5px;
-font-size: 11px;
-line-height: 10px;
-color: #555;
-vertical-align: middle;
-background-color: #fcfcfc;
-border: solid 1px #ccc;
-border-bottom-color: #bbb;
-border-radius: 3px;
-box-shadow: inset 0 -1px 0 #bbb;
-}
-.pl-c {
-color: #969896;
-}
-.pl-c1,
-.pl-s .pl-v {
-color: #0086b3;
-}
-.pl-e,
-.pl-en {
-color: #795da3;
-}
-.pl-s .pl-s1,
-.pl-smi {
-color: #333;
-}
-.pl-ent {
-color: #63a35c;
-}
-.pl-k {
-color: #a71d5d;
-}
-.pl-pds,
-.pl-s,
-.pl-s .pl-pse .pl-s1,
-.pl-sr,
-.pl-sr .pl-cce,
-.pl-sr .pl-sra,
-.pl-sr .pl-sre {
-color: #183691;
-}
-.pl-v {
-color: #ed6a43;
-}
-.pl-id {
-color: #b52a1d;
-}
-.pl-ii {
-background-color: #b52a1d;
-color: #f8f8f8;
-}
-.pl-sr .pl-cce {
-color: #63a35c;
-font-weight: bold;
-}
-.pl-ml {
-color: #693a17;
-}
-.pl-mh,
-.pl-mh .pl-en,
-.pl-ms {
-color: #1d3e81;
-font-weight: bold;
-}
-.pl-mq {
-color: #008080;
-}
-.pl-mi {
-color: #333;
-font-style: italic;
-}
-.pl-mb {
-color: #333;
-font-weight: bold;
-}
-.pl-md {
-background-color: #ffecec;
-color: #bd2c00;
-}
-.pl-mi1 {
-background-color: #eaffea;
-color: #55a532;
-}
-.pl-mdr {
-color: #795da3;
-font-weight: bold;
-}
-.pl-mo {
-color: #1d3e81;
-}
-kbd {
-display: inline-block;
-padding: 3px 5px;
-font: 11px Consolas, "Liberation Mono", Menlo, Courier, monospace;
-line-height: 10px;
-color: #555;
-vertical-align: middle;
-background-color: #fcfcfc;
-border: solid 1px #ccc;
-border-bottom-color: #bbb;
-border-radius: 3px;
-box-shadow: inset 0 -1px 0 #bbb;
-}
-.task-list-item {
-list-style-type: none;
-}
-.task-list-item+.task-list-item {
-margin-top: 3px;
-}
-.task-list-item input {
-margin: 0 0.35em 0.25em -1.6em;
-vertical-align: middle;
-}
-:checked+.radio-label {
-z-index: 1;
-position: relative;
-border-color: #4078c0;
-}
-.sourceLine {
-display: inline-block;
-}
-code .kw { color: #000000; }
-code .dt { color: #ed6a43; }
-code .dv { color: #009999; }
-code .bn { color: #009999; }
-code .fl { color: #009999; }
-code .ch { color: #009999; }
-code .st { color: #183691; }
-code .co { color: #969896; }
-code .ot { color: #0086b3; }
-code .al { color: #a61717; }
-code .fu { color: #63a35c; }
-code .er { color: #a61717; background-color: #e3d2d2; }
-code .wa { color: #000000; }
-code .cn { color: #008080; }
-code .sc { color: #008080; }
-code .vs { color: #183691; }
-code .ss { color: #183691; }
-code .im { color: #000000; }
-code .va {color: #008080; }
-code .cf { color: #000000; }
-code .op { color: #000000; }
-code .bu { color: #000000; }
-code .ex { color: #000000; }
-code .pp { color: #999999; }
-code .at { color: #008080; }
-code .do { color: #969896; }
-code .an { color: #008080; }
-code .cv { color: #008080; }
-code .in { color: #008080; }
-</style>
-<style>
-body {
-box-sizing: border-box;
-min-width: 200px;
-max-width: 980px;
-margin: 0 auto;
-padding: 45px;
-padding-top: 0px;
-}
-</style>
+State/Region aggregates are calculated.The results are visualized for
+comparing the situations of the groups.
 
-
-</head>
-
-<body>
-
-<h1 id="analysis-of-myanmar-census-2014">Analysis of Myanmar Census
-2014</h1>
-<p>UNICEF Myanmar, SPCRM 2023-06-07</p>
-<h1 id="overview">Overview</h1>
-<p>This analysis is based on the <em>township level</em> information
-data of Myanmar Census 2014.We are interested in examining the differece
-of school attendance rates between the children with <em>no
-disability</em> and their counterparts with <em>severe
-disability</em>.</p>
-<p>Using the <strong>REDATAM</strong> that is designed to extract data
-from Census, we constructed two data sets at township level, each
-representing the primary school attendance rates of our groups of
-interest (normal vs.&nbsp;severe) disability).</p>
-<p>State/Region aggregates are calculated.The results are visualized for
-comparing the situations of the groups.</p>
-<p>All datasets produced in our analytical project can be found on the
+All datasets produced in our analytical project can be found on the
 Github repository.We also provided a couple of R-script documents that
-we used during the process for data arrangement and analyses. <em><a href="https://github.com/AungLwin25/Disability">https://github.com/AungLwin25/Disability</a></em></p>
-<p>Paritcular thanks to our colleagues, Bjorn Gelders for formulating
-the framework of analysis, and Aung Lwin for kniting algorithms,
-wrangling data, computing statistics, and producing visuals. — UNICEF
-Myanmar, SPCRM</p>
-<h1 id="average-primary-school-attendances-of-townships">Average primary
-school attendances of townships</h1>
-<h2 id="tables">Tables</h2>
-<h3 id="summary-statistics">Summary statistics</h3>
-<pre><code>##       SR                Normal          Severe     
-##  Length:15          Min.   :58.13   Min.   :20.98  
-##  Class :character   1st Qu.:80.53   1st Qu.:26.64  
-##  Mode  :character   Median :81.51   Median :31.29  
-##                     Mean   :80.18   Mean   :31.23  
-##                     3rd Qu.:83.97   3rd Qu.:35.02  
-##                     Max.   :87.20   Max.   :46.18</code></pre>
-<h3 id="stateregion-aggregates">State/region aggregates</h3>
-<pre><code>## # A tibble: 15 × 3
-##    SR          Normal Severe
-##    &lt;chr&gt;        &lt;dbl&gt;  &lt;dbl&gt;
-##  1 Ayeyawady     82.7   35.0
-##  2 Bago          84.5   27.8
-##  3 Chin          87.2   46.2
-##  4 Kachin        81.5   31.5
-##  5 Kayah         85.7   36.6
-##  6 Kayin         71.7   32.2
-##  7 Magway        84.7   31.3
-##  8 Mandalay      82.0   25.6
-##  9 Mon           81.2   27.7
-## 10 Nay Pyi Taw   80.8   21.0
-## 11 Rakhine       80.2   38.1
-## 12 Sagaing       83.4   30.8
-## 13 Shan          58.1   25.6
-## 14 Tanintharyi   81.1   35.0
-## 15 Yangon        77.9   24.0</code></pre>
-<h2 id="visuals">Visuals</h2>
-<h3 id="boxplot">Boxplot</h3>
-<p><img src="data:image/png;base64,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"><!-- --></p>
-<h3 id="group-bar">Group bar</h3>
-<p><img src="data:image/png;base64,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"><!-- --></p>
-<h2 id="township-data">Township data</h2>
-<h3 id="data-table">Data Table</h3>
+we used during the process for data arrangement and analyses.
+*<https://github.com/AungLwin25/Disability>*
+
+Paritcular thanks to our colleagues, Bjorn Gelders for formulating the
+framework of analysis, and Aung Lwin for kniting algorithms, wrangling
+data, computing statistics, and producing visuals. — UNICEF Myanmar,
+SPCRM
+
+# Average primary school attendances of townships
+
+## Tables
+
+### Summary statistics
+
+    ##       SR                Normal          Severe     
+    ##  Length:15          Min.   :58.13   Min.   :20.98  
+    ##  Class :character   1st Qu.:80.53   1st Qu.:26.64  
+    ##  Mode  :character   Median :81.51   Median :31.29  
+    ##                     Mean   :80.18   Mean   :31.23  
+    ##                     3rd Qu.:83.97   3rd Qu.:35.02  
+    ##                     Max.   :87.20   Max.   :46.18
+
+### State/region aggregates
+
+    ## # A tibble: 15 × 3
+    ##    SR          Normal Severe
+    ##    <chr>        <dbl>  <dbl>
+    ##  1 Ayeyawady     82.7   35.0
+    ##  2 Bago          84.5   27.8
+    ##  3 Chin          87.2   46.2
+    ##  4 Kachin        81.5   31.5
+    ##  5 Kayah         85.7   36.6
+    ##  6 Kayin         71.7   32.2
+    ##  7 Magway        84.7   31.3
+    ##  8 Mandalay      82.0   25.6
+    ##  9 Mon           81.2   27.7
+    ## 10 Nay Pyi Taw   80.8   21.0
+    ## 11 Rakhine       80.2   38.1
+    ## 12 Sagaing       83.4   30.8
+    ## 13 Shan          58.1   25.6
+    ## 14 Tanintharyi   81.1   35.0
+    ## 15 Yangon        77.9   24.0
+
+## Visuals
+
+### Boxplot
+
+![](PriAttRate_files/figure-gfm/bp2-1.png)<!-- -->
+
+### Group bar
+
+![](PriAttRate_files/figure-gfm/gb2-1.png)<!-- -->
+
+## Township data
+
+### Data Table
+
 <table style="NAborder-bottom: 0;">
 <caption>
 <heading> Primary School Attendance rates</heading>
@@ -10224,12 +9643,9 @@ status.</span>
 </tfoot>
 </table>
 
-<h1 id="conclusion">Conclusion</h1>
-<p>The analytical results from Myanmar Census 2014 show that the
-children having <em>severe disability</em> were <strong>hugely</strong>
-laggging behind in their primary school attendance compared to those of
-the children with <em>no disability</em>.</p>
+# Conclusion
 
-
-
-</body></html>
+The analytical results from Myanmar Census 2014 show that the children
+having *severe disability* were **hugely** laggging behind in their
+primary school attendance compared to those of the children with *no
+disability*.
