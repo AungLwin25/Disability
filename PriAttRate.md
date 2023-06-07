@@ -7,14 +7,15 @@ UNICEF Myanmar, SPCRM
 # Overview
 
 This analysis is based on the *township level* information data of
-Myanmar Census 2014.We are interested in examining the differece of
+Myanmar Census 2014.We are interested in examining the difference of
 school attendance rates between the children with *no disability* and
 their counterparts with *severe disability*.
 
 Using the **REDATAM** that is designed to extract data from Census, we
-constructed two data sets at township level, each representing the
-primary school attendance rates of our groups of interest (normal
-vs. severe) disability).
+constructed two data sets at township level that are representing the
+primary school attendance rates of our groups of interest— normal
+vs. severe disability of the primary school age population of the 6-10
+year old children.
 
 State/Region aggregates are calculated.The results are visualized for
 comparing the situations of the groups.
@@ -24,7 +25,7 @@ Github repository.We also provided a couple of R-script documents that
 we used during the process for data arrangement and analyses.
 *<https://github.com/AungLwin25/Disability>*
 
-Paritcular thanks to our colleagues, Bjorn Gelders for formulating the
+Particular credits to our colleagues, Bjorn Gelders for formulating the
 framework of analysis, and Aung Lwin for kniting algorithms, wrangling
 data, computing statistics, and producing visuals. — UNICEF Myanmar,
 SPCRM
@@ -74,9 +75,16 @@ SPCRM
 
 ![](PriAttRate_files/figure-gfm/gb2-1.png)<!-- -->
 
-## Township data
+# Conclusion
 
-### Data Table
+The analytical results from Myanmar Census 2014 show that the children
+having *severe disability* were **hugely** lagging behind in their
+primary school attendance compared to those of the children with *no
+disability*.
+
+# Appendix
+
+## Data Table of township values
 
 <table style="NAborder-bottom: 0;">
 <caption>
@@ -9643,10 +9651,3 @@ status.</span>
 </tr>
 </tfoot>
 </table>
-
-# Conclusion
-
-The analytical results from Myanmar Census 2014 show that the children
-having *severe disability* were **hugely** laggging behind in their
-primary school attendance compared to those of the children with *no
-disability*.
