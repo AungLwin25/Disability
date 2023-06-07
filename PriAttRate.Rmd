@@ -1,7 +1,6 @@
 ---
-title: "Analysis of Myanmar Census 2014"
+title: 'Primary school attendance rates of children by their disability status: <br> Insights observed from data of Myanmar Census(2014)'
 author: "UNICEF Myanmar, SPCRM"
-subtitle: Primary school attendance rates of normal children and children with severe disability
 date: "2023-06-07"
 always_allow_html: true
 output: github_document
