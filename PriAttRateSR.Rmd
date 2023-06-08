@@ -1,0 +1,193 @@
+---
+title: 'School attendance rates of children in primary school age by their disability status: <br> Insights observed from data of Myanmar Census(2014)'
+author: "UNICEF Myanmar, SPCRM"
+date: "2023-06-08"
+always_allow_html: true
+output: github_document
+---
+
+# Overview
+
+This analysis is based on the *township level* information data of Myanmar Census 2014.We are interested in examining the difference of school attendance rates between the children with *no disability* and their counterparts with *severe disability* for the population of primary school age children (6-10 year old).
+
+Using the **REDATAM** that is designed to extract data from Census, we constructed two data sets at township level that are representing the primary school attendance rates of our targeted groups of analysis — normal vs. severe disability of the primary school age population.
+
+The State/Region aggregates are calculated in two ways.The first method finds the average attendance rate of townships of state/regions in each group. The second method directly computes each group's state/regions' attendance rates from their total counts of attending children divided by the respective base populations.In the current post for web display, we focused on the results of the *weighted analysis* that is applicable with the second method.The results are visualized for comparing the situations of the groups.
+
+All data sets produced in our analytic project can be found on the Github repository.We also provided a couple of R-script documents that we used during the process for data arrangement and analyses. *https://github.com/AungLwin25/Disability*
+
+Particular credits to our colleagues, Bjorn Gelders for formulating the framework of analysis, and Aung Lwin for kniting algorithms, wrangling data, computing statistics, and producing visuals.
+                                          — UNICEF Myanmar, SPCRM
+
+```{r setup, include=FALSE, echo=FALSE}
+library(readxl)
+library(haven)
+library(kableExtra)
+library(dplyr)
+library(tidyverse)
+library(janitor)
+library(ggthemes)
+library(gridExtra)
+library(reshape2)
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r read, echo=FALSE, message=FALSE, results='hide',warning=FALSE}
+# Gather base township information (geomarkers, districts,states/regions)
+TsDB128b <- read_dta("C:/Users/aklwin/OneDrive/UNICEF ME2/Database/States/Profile/Townships/Data/Work/TsDB128b.dta")
+
+Ts<-TsDB128b
+
+library(tidyverse)
+Ts %>% select(5,9,10,11,13,14) -> Loc
+
+rename(Loc, SR=MyaState2,
+             AreaCode = TsAreaCode) -> Loc2
+
+```
+
+```{r mutate_var, echo=FALSE,message=FALSE, results='hide',warning=FALSE}
+# Gather disability data set and normal data set
+## Disability
+TsSex <- function(name) {
+    temp <<- readxl::read_excel(file.path(directory = "C:/Users/aklwin/OneDrive/R programming/Github/Disability", paste0(name,".xlsx")))
+    temp[1:413,1:5] ->> temp2
+    write.csv(temp2, paste0(name,"_cl",".csv"))
+    temp2 ->temp3
+}
+
+TsSex("Cs14AnySevereDsbPriSex") -> df
+TsSex("Cs14AnySevereDsbPriAttSex") -> df2
+
+df[1] -> a
+df2[1] -> b
+sum(a==b)
+
+rename(df, SevMale = Male,
+           SevFemale= Female,
+           SevTotal = Total) -> d1
+
+df2 %>% select(3:5) %>% rename_with( ~ paste0("AttSv", .x)) -> d2
+
+cbind(d1,d2) -> d3
+d3 %>% mutate( pcAttSvMale   = 100 * AttSvMale/SevMale,
+               pcAttSvFemale = 100 * AttSvFemale/SevFemale,
+               pcAttSvTotal = 100 * AttSvTotal/SevTotal) -> d4
+
+## Normal
+TsSex("Cs14_NoDsbPriAge") -> n1
+TsSex("Cs14NoDsbPriAttSex") -> n2
+
+n1 %>% select(3:5) %>% rename_with( ~ paste0("Nm", .x)) -> n3
+n2 %>% select(3:5) %>% rename_with( ~ paste0("AttNm", .x)) -> n4
+
+cbind(n1[1:2],n3,n4) -> n5
+head(n5,3)
+
+
+# Combine two data sets
+cbind(d4,n5[3:8]) -> PriAtt
+
+rename(PriAtt,AreaCode = `Area code`)-> p2
+inner_join(Loc2,p2, by = "AreaCode") -> p3
+
+write.csv(p3,"p3.csv")
+
+# Calculation
+p3 %>% group_by(SR) %>%
+    summarise(SevMale = sum(SevMale,na.rm=TRUE),
+    SevFemale = sum(SevFemale,na.rm=TRUE),
+    SevTotal = sum(SevTotal,na.rm=TRUE),
+    AttSvMale = sum(AttSvMale,na.rm=TRUE),
+    AttSvFemale= sum(AttSvFemale,na.rm=TRUE),
+    AttSvTotal= sum(AttSvTotal,na.rm=TRUE),
+    NmMale = sum(NmMale,na.rm=TRUE),
+    NmFemale = sum(NmFemale,na.rm=TRUE),
+    NmTotal = sum(NmTotal,na.rm=TRUE),
+    AttNmMale = sum(AttNmMale,na.rm=TRUE),
+    AttNmFemale = sum(AttNmFemale,na.rm=TRUE),
+    AttNmTotal = sum(AttNmTotal,na.rm=TRUE)) -> SRPri
+```
+# Average primary school attendances of townships 
+## Tables
+
+### Summary statistics
+```{r sum, echo=FALSE}
+SRPri %>% mutate(
+            pcSevMaleAtt = AttSvMale * 100/SevMale,
+            pcSevFemaleAtt = AttSvFemale * 100/SevFemale,
+            pcSevTotalAtt = AttSvTotal * 100/SevTotal,
+            pcNmMaleAtt = AttNmMale * 100/NmMale,
+            pcNmFemaleAtt = AttNmFemale * 100/NmFemale,
+            pcNmTotalAtt = AttNmTotal * 100/NmTotal) -> pcSRPri
+
+s2 <- pcSRPri[c(1,16,19)]
+names(s2) <-c("State/Region", "Severe", "Normal")
+summary(s2)
+
+```
+
+### State/region aggregates
+```{r table, echo=FALSE}
+# Summarize state/region aggregates
+
+print(s2)
+```
+
+## Visuals
+### Boxplot
+```{r bp, echo=FALSE, message=FALSE, results='hide',warning=FALSE}
+melt(s2, id="State/Region") -> s3
+```
+
+```{r bp2, echo=FALSE}
+ggplot(s3, aes(y=value, fill=variable)) + 
+    geom_boxplot(width=0.5) +
+    labs(fill="Disability status") +
+    scale_x_discrete(labels = NULL, breaks = NULL) +
+    scale_fill_manual(name="",
+                      values=c("#9999FF","#66FFFF"),
+                      labels=c("Severe","Normal")) +
+    ylab("percent") + ylim(0,100) +
+    theme_minimal() +
+    theme(legend.position = c(0.2, 0.5))
+```
+
+### Group bar
+
+```{r gb2, echo=FALSE}
+ggplot(s3, aes(y=value, x=`State/Region`, fill = variable)) +
+    geom_bar(position="dodge", stat="identity") +
+    scale_fill_manual(name="",
+                      values=c("#7F00FF","#33FF33" ),
+                      labels=c("Severe","Normal"))  +
+    xlab ("State and Region") + ylab ("Percent") +
+    theme_minimal()+
+    theme(legend.position = "top") +
+    theme(axis.text.x = element_text(angle=90)) +
+    ggtitle("Primary School Attendance")
+```
+
+```{r dt, echo=FALSE}
+names(s3) <- c("State/Region","Disability Status", "Attendance(%)") 
+options(digits = 3)
+kable(s3, caption= "<Heading 1> Primary School Attendance rates",format ="html") %>%  
+    footnote(general = "", general_title = "N.B. The NA values are on the children with disaiblity side that might also mean their being neglected status.")
+```
+
+# Conclusion
+The analytical results from Myanmar Census 2014 show that the children having *severe disability* were **hugely** lagging behind in their primary school attendance compared to those of the children with *no disability*.
+
+# Appendix
+
+## Township attendance rates
+```{r print_tb, echo=FALSE, results= 'asis', warning=FALSE, message=FALSE}
+p3 %>% select(1,4,contains("pc")) -> p4
+names(p4) <-c("State/Region","Census Township", "Male Severe","Female Severe","Total Severe","Male Normal","Female Normal","Total Normal")
+```
+```{r print_tb2, echo=FALSE, results= 'asis', warning=FALSE, message=FALSE}
+options(digits = 3)
+kable(p4, caption= "<Heading 1> Primary School Attendance rates",format ="html") %>%  
+    footnote(general = "", general_title = "N.B. The NA values are on the children with disaiblity side that might also mean their being neglected status.")
+```
