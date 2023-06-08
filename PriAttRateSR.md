@@ -37,7 +37,7 @@ framework of analysis, and Aung Lwin for kniting algorithms, wrangling
 data, computing statistics, and producing visuals. — UNICEF Myanmar,
 SPCRM
 
-# Average primary school attendances of townships
+# School attendance rates of primary school age children
 
 ## Tables
 
@@ -51,7 +51,7 @@ SPCRM
     ##                     3rd Qu.:35.83   3rd Qu.:84.47  
     ##                     Max.   :47.08   Max.   :88.03
 
-### State/region aggregates
+### Attendance rates by State/region
 
     ## # A tibble: 15 × 3
     ##    `State/Region` Severe Normal

@@ -109,7 +109,7 @@ p3 %>% group_by(SR) %>%
     AttNmFemale = sum(AttNmFemale,na.rm=TRUE),
     AttNmTotal = sum(AttNmTotal,na.rm=TRUE)) -> SRPri
 ```
-# Average primary school attendances of townships 
+# School attendance rates of primary school age children 
 ## Tables
 
 ### Summary statistics
@@ -128,7 +128,7 @@ summary(s2)
 
 ```
 
-### State/region aggregates
+### Attendance rates by State/region 
 ```{r table, echo=FALSE}
 # Summarize state/region aggregates
 
